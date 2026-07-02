@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>JiwuAI · AI工具导航</title>
+<meta name="description" content="主流AI工具聚合导航 - ChatGPT、Claude、DeepSeek、Midjourney、Suno、即梦等一站式入口">
+<style>
+:root{--bg:#fafafa;--card:#fff;--border:#e8e8ec;--text:#1a1a2e;--text2:#888;--accent:#7c3aed;--accent2:#6d28d9;--green:#16a34a;--orange:#d97706;--blue:#2563eb;--pink:#db2777}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:"Segoe UI","Microsoft YaHei",system-ui,sans-serif;min-height:100vh}
+/* 导航栏 */
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.04);padding:0 24px;display:flex;align-items:center;justify-content:center;height:56px;gap:16px}
+nav .nav-inner{max-width:1100px;width:100%;display:flex;align-items:center;gap:16px}
+nav .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+nav .logo img{width:32px;height:32px;border-radius:8px}
+nav .logo span{font-size:17px;font-weight:700;color:var(--accent);letter-spacing:-0.5px}
+nav .links{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+nav .links a{padding:6px 14px;border-radius:6px;font-size:12px;color:var(--text2);text-decoration:none;transition:all .15s;white-space:nowrap}
+nav .links a:hover,.nav .links a.active{background:rgba(124,58,237,.08);color:var(--accent);font-weight:600}
+/* 主体 */
+main{max-width:1100px;margin:0 auto;padding:32px 24px}
+/* Hero */
+.hero{text-align:center;padding:60px 0 48px;display:flex;flex-direction:column;align-items:center}
+.hero h1{font-size:38px;font-weight:700;color:var(--text);margin-bottom:14px;letter-spacing:-1px}
+.hero p{font-size:15px;color:var(--text2);max-width:500px;margin:0 auto;line-height:1.7}
+.hero .badge{display:inline-block;margin-bottom:16px;padding:4px 14px;background:rgba(124,58,237,.06);border:1px solid rgba(124,58,237,.2);border-radius:20px;font-size:11px;color:var(--accent);letter-spacing:1px}
+/* 分类 */
+.section{margin-bottom:40px}
+.section-title{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.section-title .icon{font-size:22px}
+.section-title h2{font-size:17px;font-weight:600;color:var(--text)}
+.section-title .count{font-size:11px;color:var(--text2);background:#f0f0f3;padding:2px 10px;border-radius:10px}
+/* 卡片网格 */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;transition:all .2s;cursor:pointer;text-decoration:none;display:block;position:relative;overflow:hidden}
+.card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,58,237,.1)}
+.card:hover::before{opacity:1}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .2s}
+.card-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.card-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.card-icon.chat{background:rgba(34,197,94,.12);color:var(--green)}
+.card-icon.image{background:rgba(236,72,153,.12);color:var(--pink)}
+.card-icon.video{background:rgba(59,130,246,.12);color:var(--blue)}
+.card-icon.code{background:rgba(245,158,11,.12);color:var(--orange)}
+.card-icon.office{background:rgba(124,58,237,.12);color:var(--accent2)}
+.card-icon.other{background:rgba(107,107,120,.12);color:var(--text2)}
+.card h3{font-size:14px;font-weight:600;color:var(--text);margin-bottom:0}
+.card .domain{font-size:11px;color:var(--text2);margin-top:1px}
+.card p{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:8px}
+.card .tags{display:flex;gap:4px;flex-wrap:wrap}
+.card .tag{font-size:10px;padding:2px 8px;border-radius:4px;background:rgba(124,58,237,.08);color:var(--accent2);border:1px solid rgba(124,58,237,.15)}
+.card .tag.free{background:rgba(34,197,94,.08);color:var(--green);border-color:rgba(34,197,94,.15)}
+.card .tag.hot{background:rgba(245,158,11,.08);color:var(--orange);border-color:rgba(245,158,11,.15)}
+/* 搜索 */
+.search-bar{max-width:500px;margin:0 auto 48px;position:relative}
+.search-bar input{width:100%;padding:14px 20px 14px 48px;background:var(--card);border:1px solid var(--border);border-radius:12px;font-size:14px;color:var(--text);outline:none;transition:border-color .2s;font-family:inherit}
+.search-bar input:focus{border-color:var(--accent)}
+.search-bar input::placeholder{color:var(--text2)}
+.search-bar .search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text2);font-size:16px}
+/* Footer */
+footer{text-align:center;padding:40px 24px;color:var(--text2);font-size:12px;border-top:1px solid var(--border);margin-top:40px;background:var(--bg)}
+footer a{color:var(--accent2);text-decoration:none}
+/* 响应式 */
+@media(max-width:640px){
+  .hero h1{font-size:26px}
+  .grid{grid-template-columns:1fr}
+  nav{padding:0 12px;justify-content:flex-start}
+  nav .links{display:none}
+  .hero h1{font-size:26px}
+  .hero{padding:36px 16px 32px}
+}
+/* 隐藏动画 */
+.card{animation:fadeUp .4s ease backwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card:nth-child(1){animation-delay:0s}
+.card:nth-child(2){animation-delay:.05s}
+.card:nth-child(3){animation-delay:.1s}
+.card:nth-child(4){animation-delay:.15s}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="nav-inner">
+  <a href="#" class="logo">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237c3aed'/%3E%3Ctext x='16' y='22' text-anchor='middle' fill='white' font-size='18' font-family='sans-serif' font-weight='bold'%3EJ%3C/text%3E%3C/svg%3E" alt="JiwuAI">
+    <span>JiwuAI</span>
+  </a>
+  <div class="links">
+    <a href="#chat" class="active">💬 AI对话</a>
+    <a href="#image">🎨 AI绘画</a>
+    <a href="#video">🎬 AI视频</a>
+    <a href="#code">💻 AI编程</a>
+    <a href="#office">📋 AI办公</a>
+  </div>
+</div>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="badge">🦞 JiwuAI 导航 · 2026</div>
+    <h1>AI 工具一站导航</h1>
+    <p>精选国内外主流AI工具，覆盖对话、绘画、视频、编程、办公。点击卡片直达，无需注册多个账号来回切换。</p>
+  </div>
+
+  <div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search" placeholder="搜索AI工具..." oninput="filterCards()">
+  </div>
+
+  <!-- AI对话 -->
+  <div class="section" id="chat">
+    <div class="section-title">
+      <span class="icon">💬</span><h2>AI 对话助手</h2>
+      <span class="count">6个</span>
+    </div>
+    <div class="grid">
+      <a href="https://chat.openai.com" target="_blank" class="card" data-keywords="ChatGPT OpenAI GPT-4 对话">
+        <div class="card-header"><div class="card-icon chat">🤖</div><div><h3>ChatGPT</h3><div class="domain">chat.openai.com</div></div></div>
+        <p>OpenAI旗舰产品，GPT-4级别对话能力，支持插件、联网、代码解释器</p>
+        <div class="tags"><span class="tag hot">最热门</span><span class="tag">GPT-4</span><span class="tag">联网</span></div>
+      </a>
+      <a href="https://claude.ai" target="_blank" class="card" data-keywords="Claude Anthropic 对话 长文本">
+        <div class="card-header"><div class="card-icon chat">🧠</div><div><h3>Claude</h3><div class="domain">claude.ai</div></div></div>
+        <p>Anthropic出品，超长上下文200K，编程和写作能力出色</p>
+        <div class="tags"><span class="tag hot">200K</span><span class="tag">编程强</span></div>
+      </a>
+      <a href="https://chat.deepseek.com" target="_blank" class="card" data-keywords="DeepSeek 深度求索 国产 免费">
+        <div class="card-header"><div class="card-icon chat">🐋</div><div><h3>DeepSeek</h3><div class="domain">chat.deepseek.com</div></div></div>
+        <p>国产开源大模型，媲美GPT-4，支持128K上下文，免费</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">128K</span><span class="tag">国产</span></div>
+      </a>
+      <a href="https://tongyi.aliyun.com" target="_blank" class="card" data-keywords="通义千问 阿里 Qwen 国产">
+        <div class="card-header"><div class="card-icon chat">☁️</div><div><h3>通义千问</h3><div class="domain">tongyi.aliyun.com</div></div></div>
+        <p>阿里云出品，Qwen系列模型，多模态理解，企业级应用</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">多模态</span></div>
+      </a>
+      <a href="https://www.doubao.com" target="_blank" class="card" data-keywords="豆包 字节跳动 免费 AI">
+        <div class="card-header"><div class="card-icon chat">🫘</div><div><h3>豆包</h3><div class="domain">doubao.com</div></div></div>
+        <p>字节跳动出品，免费使用，支持联网搜索和文件上传</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">联网</span></div>
+      </a>
+      <a href="https://gemini.google.com" target="_blank" class="card" data-keywords="Gemini Google 多模态">
+        <div class="card-header"><div class="card-icon chat">💎</div><div><h3>Gemini</h3><div class="domain">gemini.google.com</div></div></div>
+        <p>Google多模态AI，原生支持图片/视频/音频理解</p>
+        <div class="tags"><span class="tag">多模态</span><span class="tag">Google</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- AI绘画 -->
+  <div class="section" id="image">
+    <div class="section-title">
+      <span class="icon">🎨</span><h2>AI 绘画生成</h2>
+      <span class="count">5个</span>
+    </div>
+    <div class="grid">
+      <a href="https://www.midjourney.com" target="_blank" class="card" data-keywords="Midjourney MJ 绘画 AI绘图">
+        <div class="card-header"><div class="card-icon image">🎨</div><div><h3>Midjourney</h3><div class="domain">midjourney.com</div></div></div>
+        <p>最强AI绘画工具，艺术品质，Discord内使用</p>
+        <div class="tags"><span class="tag hot">顶级</span><span class="tag">付费</span></div>
+      </a>
+      <a href="https://www.jimeng.ai" target="_blank" class="card" data-keywords="即梦 字节 免费 AI绘画 视频">
+        <div class="card-header"><div class="card-icon image">✨</div><div><h3>即梦</h3><div class="domain">jimeng.ai</div></div></div>
+        <p>字节跳动出品，免费AI绘画+视频生成，中文友好</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">视频</span></div>
+      </a>
+      <a href="https://github.com/comfyanonymous/ComfyUI" target="_blank" class="card" data-keywords="ComfyUI Stable Diffusion 本地 开源">
+        <div class="card-header"><div class="card-icon image">🔧</div><div><h3>ComfyUI</h3><div class="domain">github.com</div></div></div>
+        <p>最强本地AI绘画工作流，节点式编排，完全可控</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">本地</span><span class="tag">开源</span></div>
+      </a>
+      <a href="https://www.adobe.com/products/firefly.html" target="_blank" class="card" data-keywords="Adobe Firefly PS AI">
+        <div class="card-header"><div class="card-icon image">🦋</div><div><h3>Adobe Firefly</h3><div class="domain">adobe.com</div></div></div>
+        <p>Adobe官方AI，深度集成PS/AI，商用安全</p>
+        <div class="tags"><span class="tag">商用安全</span><span class="tag">Adobe</span></div>
+      </a>
+      <a href="https://leonardo.ai" target="_blank" class="card" data-keywords="Leonardo AI 游戏 素材">
+        <div class="card-header"><div class="card-icon image">🎮</div><div><h3>Leonardo.ai</h3><div class="domain">leonardo.ai</div></div></div>
+        <p>游戏素材AI生成神器，角色/场景/道具一站式</p>
+        <div class="tags"><span class="tag">游戏</span><span class="tag free">有免费额度</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- AI视频 -->
+  <div class="section" id="video">
+    <div class="section-title">
+      <span class="icon">🎬</span><h2>AI 视频与音乐</h2>
+      <span class="count">5个</span>
+    </div>
+    <div class="grid">
+      <a href="https://kling.ai" target="_blank" class="card" data-keywords="可灵 快手 AI视频 免费">
+        <div class="card-header"><div class="card-icon video">⚡</div><div><h3>可灵 Kling</h3><div class="domain">kling.ai</div></div></div>
+        <p>快手出品，AI视频生成，图生视频效果惊艳，免费</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag hot">推荐</span></div>
+      </a>
+      <a href="https://suno.ai" target="_blank" class="card" data-keywords="Suno AI音乐 作曲 免费">
+        <div class="card-header"><div class="card-icon video">🎵</div><div><h3>Suno</h3><div class="domain">suno.ai</div></div></div>
+        <p>AI音乐生成，输入歌词自动作曲+编曲+演唱</p>
+        <div class="tags"><span class="tag free">有免费额度</span><span class="tag hot">热门</span></div>
+      </a>
+      <a href="https://runwayml.com" target="_blank" class="card" data-keywords="Runway Gen-3 AI视频 专业">
+        <div class="card-header"><div class="card-icon video">🎥</div><div><h3>Runway</h3><div class="domain">runwayml.com</div></div></div>
+        <p>专业AI视频编辑，Gen-3模型，影视级画面控制</p>
+        <div class="tags"><span class="tag">专业</span><span class="tag">视频编辑</span></div>
+      </a>
+      <a href="https://www.capcut.cn" target="_blank" class="card" data-keywords="剪映 字节 免费 视频剪辑 AI">
+        <div class="card-header"><div class="card-icon video">✂️</div><div><h3>剪映</h3><div class="domain">capcut.cn</div></div></div>
+        <p>字节出品，AI剪辑+数字人+自动字幕，抖音必备</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">抖音</span></div>
+      </a>
+      <a href="https://udio.com" target="_blank" class="card" data-keywords="Udio AI音乐 Suno替代">
+        <div class="card-header"><div class="card-icon video">🎹</div><div><h3>Udio</h3><div class="domain">udio.com</div></div></div>
+        <p>Suno竞品，音质更佳，支持更长时长音乐生成</p>
+        <div class="tags"><span class="tag free">有免费额度</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- AI编程 -->
+  <div class="section" id="code">
+    <div class="section-title">
+      <span class="icon">💻</span><h2>AI 编程开发</h2>
+      <span class="count">5个</span>
+    </div>
+    <div class="grid">
+      <a href="https://github.com/features/copilot" target="_blank" class="card" data-keywords="GitHub Copilot 编程 AI 代码">
+        <div class="card-header"><div class="card-icon code">🐱</div><div><h3>GitHub Copilot</h3><div class="domain">github.com</div></div></div>
+        <p>最强AI编程助手，深度集成VS Code/JetBrains</p>
+        <div class="tags"><span class="tag hot">必装</span><span class="tag">付费</span></div>
+      </a>
+      <a href="https://cursor.sh" target="_blank" class="card" data-keywords="Cursor AI IDE 编程">
+        <div class="card-header"><div class="card-icon code">🖱️</div><div><h3>Cursor</h3><div class="domain">cursor.sh</div></div></div>
+        <p>AI-first代码编辑器，Claude/GPT集成，Tab补全</p>
+        <div class="tags"><span class="tag hot">推荐</span><span class="tag free">有免费额度</span></div>
+      </a>
+      <a href="https://v0.dev" target="_blank" class="card" data-keywords="v0 Vercel 前端 UI 生成">
+        <div class="card-header"><div class="card-icon code">🖼️</div><div><h3>v0 by Vercel</h3><div class="domain">v0.dev</div></div></div>
+        <p>AI生成前端UI，描述需求直接出React/Tailwind代码</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">前端</span></div>
+      </a>
+      <a href="https://windsurf.com" target="_blank" class="card" data-keywords="Windsurf Codeium IDE AI">
+        <div class="card-header"><div class="card-icon code">🌊</div><div><h3>Windsurf</h3><div class="domain">windsurf.com</div></div></div>
+        <p>Codeium出品的新一代AI IDE，上下文感知极强</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag hot">新秀</span></div>
+      </a>
+      <a href="https://bolt.new" target="_blank" class="card" data-keywords="Bolt 全栈 AI StackBlitz">
+        <div class="card-header"><div class="card-icon code">⚡</div><div><h3>Bolt.new</h3><div class="domain">bolt.new</div></div></div>
+        <p>浏览器内AI全栈开发，一句话生成完整Web应用</p>
+        <div class="tags"><span class="tag free">有免费额度</span><span class="tag">全栈</span></div>
+      </a>
+    </div>
+  </div>
+
+  <!-- AI办公 -->
+  <div class="section" id="office">
+    <div class="section-title">
+      <span class="icon">📋</span><h2>AI 办公效率</h2>
+      <span class="count">5个</span>
+    </div>
+    <div class="grid">
+      <a href="https://www.notion.so/product/ai" target="_blank" class="card" data-keywords="Notion AI 笔记 办公 写作">
+        <div class="card-header"><div class="card-icon office">📝</div><div><h3>Notion AI</h3><div class="domain">notion.so</div></div></div>
+        <p>最强AI笔记，自动总结/翻译/续写，团队协作</p>
+        <div class="tags"><span class="tag">付费</span><span class="tag hot">必用</span></div>
+      </a>
+      <a href="https://www.perplexity.ai" target="_blank" class="card" data-keywords="Perplexity AI搜索 联网 研究">
+        <div class="card-header"><div class="card-icon office">🔍</div><div><h3>Perplexity</h3><div class="domain">perplexity.ai</div></div></div>
+        <p>AI搜索引擎，实时联网+引用来源，替代Google</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag hot">推荐</span></div>
+      </a>
+      <a href="https://gamma.app" target="_blank" class="card" data-keywords="Gamma AI PPT 演示 自动">
+        <div class="card-header"><div class="card-icon office">📊</div><div><h3>Gamma</h3><div class="domain">gamma.app</div></div></div>
+        <p>AI自动生成PPT/演示文稿，输入主题秒出成品</p>
+        <div class="tags"><span class="tag free">有免费额度</span><span class="tag">PPT</span></div>
+      </a>
+      <a href="https://feishu.cn" target="_blank" class="card" data-keywords="飞书 办公 AI 文档 多维表格">
+        <div class="card-header"><div class="card-icon office">🕊️</div><div><h3>飞书</h3><div class="domain">feishu.cn</div></div></div>
+        <p>字节出品，AI文档+多维表格+智能日历，免费</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">办公套件</span></div>
+      </a>
+      <a href="https://www.dingtalk.com" target="_blank" class="card" data-keywords="钉钉 AI 办公 阿里">
+        <div class="card-header"><div class="card-icon office">📌</div><div><h3>钉钉</h3><div class="domain">dingtalk.com</div></div></div>
+        <p>阿里出品，AI助理+智能审批+会议纪要，企业标配</p>
+        <div class="tags"><span class="tag free">免费</span><span class="tag">企业级</span></div>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>🦞 JiwuAI · AI工具导航 | 持续更新中 | <a href="https://github.com" target="_blank">提交新工具</a></p>
+  <p style="margin-top:8px;font-size:11px">声明：本站仅为导航聚合，不存储任何用户数据，所有工具归各自所有者</p>
+</footer>
+
+<script>
+function filterCards(){
+  var q = document.getElementById('search').value.toLowerCase().trim();
+  document.querySelectorAll('.card').forEach(function(card, i){
+    var kw = (card.getAttribute('data-keywords') || '').toLowerCase();
+    var text = card.textContent.toLowerCase();
+    var match = !q || kw.includes(q) || text.includes(q);
+    card.style.display = match ? '' : 'none';
+    card.style.animation = match ? '' : 'none';
+  });
+  // 隐藏空分类
+  document.querySelectorAll('.section').forEach(function(sec){
+    var visible = sec.querySelectorAll('.card[style*="display: none"]').length < sec.querySelectorAll('.card').length;
+    sec.style.display = visible ? '' : 'none';
+  });
+}
+
+// 导航锚点平滑
+document.querySelectorAll('nav a[href^="#"]').forEach(function(a){
+  a.onclick = function(e){
+    e.preventDefault();
+    var el = document.querySelector(this.getAttribute('href'));
+    if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  };
+});
+</script>
+</body>
+</html>
