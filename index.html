@@ -31,8 +31,9 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
 .section-title .icon{font-size:22px}
 .section-title h2{font-size:17px;font-weight:600;color:var(--text)}
 .section-title .count{font-size:11px;color:var(--text2);background:#f0f0f3;padding:2px 10px;border-radius:10px}
-/* 卡片网格 */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+/* 卡片网格 — 一行4个 */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid.collapsed .card:nth-child(n+5){display:none}
 .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;transition:all .2s;cursor:pointer;text-decoration:none;display:block;position:relative;overflow:hidden}
 .card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 8px 30px rgba(124,58,237,.1)}
 .card:hover::before{opacity:1}
@@ -61,10 +62,14 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
 /* Footer */
 footer{text-align:center;padding:40px 24px;color:var(--text2);font-size:12px;border-top:1px solid var(--border);margin-top:40px;background:var(--bg)}
 footer a{color:var(--accent2);text-decoration:none}
+/* 展开/折叠按钮 */
+.toggle-btn{display:block;margin:12px auto 0;padding:6px 28px;background:var(--card);border:1px solid var(--border);border-radius:20px;font-size:13px;color:var(--accent);cursor:pointer;font-family:inherit;transition:all .15s}
+.toggle-btn:hover{background:rgba(124,58,237,.06);border-color:var(--accent)}
 /* 响应式 */
+@media(max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:640px){
   .hero h1{font-size:26px}
-  .grid{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(2,1fr)}
   nav{padding:0 12px;justify-content:flex-start}
   nav .links{display:none}
   .hero h1{font-size:26px}
@@ -147,6 +152,7 @@ footer a{color:var(--accent2);text-decoration:none}
         <div class="tags"><span class="tag">多模态</span><span class="tag">Google</span></div>
       </a>
     </div>
+    <button class="toggle-btn" onclick="toggleSection(this)">展开更多 ▾</button>
   </div>
 
   <!-- AI绘画 -->
@@ -182,6 +188,7 @@ footer a{color:var(--accent2);text-decoration:none}
         <div class="tags"><span class="tag">游戏</span><span class="tag free">有免费额度</span></div>
       </a>
     </div>
+    <button class="toggle-btn" onclick="toggleSection(this)">展开更多 ▾</button>
   </div>
 
   <!-- AI视频 -->
@@ -217,6 +224,7 @@ footer a{color:var(--accent2);text-decoration:none}
         <div class="tags"><span class="tag free">有免费额度</span></div>
       </a>
     </div>
+    <button class="toggle-btn" onclick="toggleSection(this)">展开更多 ▾</button>
   </div>
 
   <!-- AI编程 -->
@@ -252,6 +260,7 @@ footer a{color:var(--accent2);text-decoration:none}
         <div class="tags"><span class="tag free">有免费额度</span><span class="tag">全栈</span></div>
       </a>
     </div>
+    <button class="toggle-btn" onclick="toggleSection(this)">展开更多 ▾</button>
   </div>
 
   <!-- AI办公 -->
@@ -287,6 +296,7 @@ footer a{color:var(--accent2);text-decoration:none}
         <div class="tags"><span class="tag free">免费</span><span class="tag">企业级</span></div>
       </a>
     </div>
+    <button class="toggle-btn" onclick="toggleSection(this)">展开更多 ▾</button>
   </div>
 </main>
 
@@ -296,14 +306,47 @@ footer a{color:var(--accent2);text-decoration:none}
 </footer>
 
 <script>
+// 初始化：默认只显示前4个，折叠
+(function(){
+  document.querySelectorAll('.section .grid').forEach(function(grid){
+    var cards = grid.querySelectorAll('.card');
+    if(cards.length > 4){
+      for(var i=4;i<cards.length;i++) cards[i].style.display='none';
+    }else{
+      var btn = grid.parentElement.querySelector('.toggle-btn');
+      if(btn) btn.style.display='none';
+    }
+  });
+})();
+
+function toggleSection(btn){
+  var grid = btn.parentElement.querySelector('.grid');
+  var cards = grid.querySelectorAll('.card');
+  var isExpanded = btn.textContent.indexOf('收起')>=0;
+  if(isExpanded){
+    for(var i=4;i<cards.length;i++) cards[i].style.display='none';
+    btn.textContent = '展开更多 ▾';
+  }else{
+    for(var i=0;i<cards.length;i++) cards[i].style.display='';
+    btn.textContent = '收起 ∧';
+  }
+}
+
 function filterCards(){
   var q = document.getElementById('search').value.toLowerCase().trim();
-  document.querySelectorAll('.card').forEach(function(card, i){
-    var kw = (card.getAttribute('data-keywords') || '').toLowerCase();
-    var text = card.textContent.toLowerCase();
-    var match = !q || kw.includes(q) || text.includes(q);
-    card.style.display = match ? '' : 'none';
-    card.style.animation = match ? '' : 'none';
+  document.querySelectorAll('.section .grid').forEach(function(grid){
+    grid.querySelectorAll('.card').forEach(function(card){
+      var kw = (card.getAttribute('data-keywords') || '').toLowerCase();
+      var text = card.textContent.toLowerCase();
+      var match = !q || kw.includes(q) || text.includes(q);
+      card.style.display = match ? '' : 'none';
+      card.style.animation = match ? '' : 'none';
+    });
+    // 搜索时自动展开
+    var btn = grid.parentElement.querySelector('.toggle-btn');
+    if(q && btn && btn.textContent.indexOf('展开')>=0){
+      toggleSection(btn);
+    }
   });
   // 隐藏空分类
   document.querySelectorAll('.section').forEach(function(sec){
